@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+  <style>
+
+    @import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
+
+    body{
+      background-color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 18px;
+      padding: 0;
+      margin: 0;
+    }
+
+    main{
+      width: 100%;
+      max-width: 800px;
+      margin: 10px auto;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .game{
+      width: 1000px;
+      height: 1000px;
+      position: relative;
+    }
+
+    canvas{
+      image-rendering: -moz-crisp-edges;
+      image-rendering: -webkit-crisp-edges;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .game canvas{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 800px;
+      height: 800px;
+    }
+
+  </style>
+
+  <script type="text/javascript" src="assets/client.js"></script>
+
+</head>
+<body>
+  
+  <main>
+    <div class="game">
+      <canvas id="save" width="200" height="200" style="z-index: 1;"></canvas>
+    </div>
+
+    <div>
+      <p class="message"></p>
+    </div>
+  </main>
+
+</body>
+</html>
