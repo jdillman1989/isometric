@@ -25,7 +25,7 @@ var tileIndex = 0;
 var selectedTileX = -1,
     selectedTileY = -1;
 
-var map = [
+var mapMulti = [
   [
     2,1,1,2,2, // top corner
     2,1,1,1,2,
@@ -48,3 +48,1206 @@ var map = [
     0,0,0,0,0
   ]
 ];
+
+var mapSingle = [
+  [2,0,0,0], // left corner
+  [2,1,1,0],
+  [2,1,1,0],
+  [2,0,0,0],
+  [2,0,1,0], // top corner
+
+  [2,0,0,0],
+  [2,1,0,0],
+  [2,1,0,0],
+  [2,1,0,0],
+  [2,0,0,0],
+
+  [2,0,0,0],
+  [2,1,3,0],
+  [2,0,0,0],
+  [2,1,0,0],
+  [2,0,0,0],
+
+  [2,0,0,0],
+  [2,1,0,0],
+  [2,1,0,0],
+  [2,1,0,0],
+  [2,0,0,0],
+
+  [2,0,0,0], // bottom corner [2,0,0,0],
+  [2,0,0,0],
+  [2,0,0,0],
+  [2,0,0,0],
+  [2,0,0,0] // right corner
+];
+
+var tiles = {
+  grass: {
+    base: '',
+    depth: ''
+  },
+  water: {
+    base: '',
+    depth: ''
+  }
+  rock: {
+    base: '',
+    depth: ''
+  }
+  lava: {
+    base: '',
+    depth: ''
+  }
+}
+
+var map = [
+
+  //////////////////////
+  // Row 1 (top left) //
+  //////////////////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 2 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 3 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 4 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 5 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 6 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 7 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 8 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 9 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+
+  ///////////
+  // Row 10 //
+  ///////////
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.water,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+],

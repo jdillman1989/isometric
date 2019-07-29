@@ -1,4 +1,4 @@
-function drawGame(map){
+function drawGameMulti(map){
   saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
 
   var layer = originY;
@@ -13,6 +13,45 @@ function drawGame(map){
 
         if(map[i][currentPos]){
           if(map[i][currentPos] == 1){
+            // color.base = greens[Math.floor(Math.random() * Math.floor(3))];
+            color.base = greens[0];
+            color.depth = '#0B1';
+          }
+          else {
+            color.base = '#88F';
+            color.depth = '#44B';
+          }
+
+          if( x == selectedTileX && y == selectedTileY){
+            color.base = 'yellow';
+          }
+
+          drawTile(x, y, color, layer);
+          tileIndex++;
+        }
+      }
+    }
+
+    layer = layer - layerDepth;
+
+  }
+}
+
+function drawGame(map){
+  saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
+
+  var layer = originY;
+
+  for(var i = 0; i < map[0].length; ++i){
+
+    for(var x = (mapW - 1); x >= 0; x--) {
+      for(var y = 0; y < mapH; y++) {
+
+        var currentPos = ((y*mapW)+x);
+        var color = {base:'', depth:''};
+
+        if(map[currentPos][i]){
+          if(map[currentPos][i] == 1){
             // color.base = greens[Math.floor(Math.random() * Math.floor(3))];
             color.base = greens[0];
             color.depth = '#0B1';
@@ -55,7 +94,7 @@ function drawTile(x, y, color, layer){
   saveCTX.fill();
   saveCTX.closePath();
 
-  // Draw tile interior
+  // Draw tile surface
   saveCTX.fillStyle = color.base;
   saveCTX.strokeStyle = color.base;
   saveCTX.beginPath();
@@ -78,38 +117,6 @@ function drawLine(x1, y1, x2, y2, color) {
   saveCTX.stroke();
 }
 
-function getCursorTile(e) {
+function drawPlayer(tile) {
 
-  var rect = saveCanvas.getBoundingClientRect();
-
-  var x = e.clientX - rect.left,
-      y = e.clientY - rect.top;
-
-  if(Math.sign(x) == 1 && Math.sign(y) == 1){
-    console.log('x: ' + x + ', y: ' + y);
-  }
-
-  // var tile = ((Math.ceil(y / (tileW * 2)) - 1) * mapW) + (Math.ceil(x / (tileH * 2)) - 1);
-  // return tile;
 }
-
-
-x = 2
-y = 72
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

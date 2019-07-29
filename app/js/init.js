@@ -17,8 +17,10 @@ window.onload = function(){
     selectedTileX = tileX;
     selectedTileY = tileY;
 
-    drawGame(map);
+    // drawGameMulti(mapMulti);
+    drawGameSingle(mapSingle);
   });
 
-  drawGame(map);
+  // drawGameMulti(mapMulti);
+  drawGameSingle(mapSingle);
 };
