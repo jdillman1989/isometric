@@ -20,6 +20,9 @@ var greens = [
   '#3D9'
 ];
 
+var speedX = 0,
+    speedY = 0;
+
 var tileIndex = 0;
 
 var selectedTileX = -1,
@@ -28,21 +31,25 @@ var selectedTileX = -1,
 var tiles = {
   grass: {
     base: '#2F5',
-    depth: '#0B1'
+    south: '#0B4',
+    east: '#3E1'
   },
   water: {
     base: '#88F',
-    depth: '#44B'
+    south: '#44D',
+    east: '#77B'
   },
   rock: {
     base: '#A77',
-    depth: '#755'
+    south: '#758',
+    east: '#A85'
   },
   lava: {
     base: '#F33',
-    depth: '#B00'
+    south: '#B03',
+    east: '#E30'
   }
-}
+};
 
 var r = '#F00';
 var d = '#B00';
@@ -62,12 +69,12 @@ var player = [
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
+  b,d,d,d,d,d,d,d,d,b,
   b,d,d,d,d,d,d,d,d,b,
   b,b,d,d,d,d,d,d,b,b,
-  0,0,b,b,d,d,b,b,0,0,
-  0,0,0,0,b,b,0,0,0,0,
+  0,b,b,b,d,d,b,b,b,0,
+  0,0,0,b,b,b,b,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0
 ];
 
@@ -456,12 +463,43 @@ var map = [
   ],
 
   [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
     0,
     {
       tile: tiles.grass,
       sprite: 0
     },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0
+  ],
+
+  [
     0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0,
     0
   ],
@@ -481,17 +519,6 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: player
-    },
-    0,
-    0,
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
       sprite: 0
     },
     0,
@@ -507,18 +534,10 @@ var map = [
     },
     0,
     0,
-    0
-  ],
-
-  [
-    0,
     {
       tile: tiles.grass,
       sprite: 0
-    },
-    0,
-    0,
-    0
+    }
   ],
 
   [
@@ -529,7 +548,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -571,13 +593,30 @@ var map = [
   ],
 
   [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
     0,
     {
       tile: tiles.grass,
       sprite: 0
     },
-    0,
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0
   ],
 
@@ -591,34 +630,6 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0,
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0,
     0,
     0
   ],
@@ -643,6 +654,20 @@ var map = [
     0,
     0,
     0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
   [
@@ -653,7 +678,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -695,11 +723,11 @@ var map = [
   ],
 
   [
-    0,
     {
-      tile: tiles.grass,
+      tile: tiles.lava,
       sprite: 0
     },
+    0,
     0,
     0,
     0
@@ -766,7 +794,10 @@ var map = [
     },
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
   [
@@ -777,7 +808,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -972,7 +1006,10 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
+    {
+      tile: tiles.rock,
+      sprite: 0
+    },
     0,
     0
   ],
@@ -1247,21 +1284,45 @@ window.onload = function(){
   saveCTX = saveCanvas.getContext("2d");
   var rect = saveCanvas.getBoundingClientRect();
 
-  // $(window).on('mousemove', function(e) {
+  $(window).on('mousemove', function(e) {
     
-  //   var x = (e.clientX - rect.left) / 4,
-  //       y = (e.clientY - rect.top) / 4;
+    var x = (e.clientX - rect.left) / 4,
+        y = (e.clientY - rect.top) / 4;
 
-  //   var xCoord = (x - (tileW / 2) - originX);
-  //   var yCoord = (y - (tileH / 2) - originY);
-  //   var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
-  //   var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+    var xCoord = (x - (tileW / 2) - originX);
+    var yCoord = (y - (tileH / 2) - originY);
+    var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+    var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
 
-  //   selectedTileX = tileX;
-  //   selectedTileY = tileY;
+    selectedTileX = tileX;
+    selectedTileY = tileY;
 
-  //   drawGame(map);
-  // });
+    drawGame(map);
+  });
+
+  $(document).keydown(function(e) {
+
+    switch(e.which) {
+
+      case 87: // W
+        speedY = -1;
+        break;
+
+      case 65: // A
+        speedX = -2;
+        break;
+
+      case 83: // S
+        speedY = 1;
+        break;
+
+      case 68: // D
+        speedX = 2;
+        break;
+    }
+
+    drawGame(map);
+  });
 
   drawGame(map);
 };
@@ -1271,20 +1332,35 @@ function drawGame(map){
 
   var layer = originY;
 
-  for(var i = 0; i < map[0].length; ++i){
+  maxHeight = map[0].length;
+
+  for(var i = 0; i < maxHeight; ++i){
 
     for(var x = (mapW - 1); x >= 0; x--) {
       for(var y = 0; y < mapH; y++) {
 
         var currentPos = ((y*mapW)+x);
+        var color = {base:'',south:'',east:''};
 
         if(map[currentPos][i]){
 
-          if( x == selectedTileX && y == selectedTileY){
-            // highlight selected tile
+          color.base = map[currentPos][i].tile.base;
+          color.south = map[currentPos][i].tile.south;
+          color.east = map[currentPos][i].tile.east;
+
+          // Check for shadows
+          for(var j = i + 1; j < maxHeight; ++j){
+            if(map[currentPos][j]){
+              color.base = map[currentPos][i].tile.south;
+              break;
+            }
           }
 
-          drawTile(x, y, map[currentPos][i].tile, layer);
+          if( x == selectedTileX && y == selectedTileY){
+            color.base = '#FF0';
+          }
+
+          drawTile(x, y, color, layer);
           tileIndex++;
 
           if(map[currentPos][i].sprite){
@@ -1303,16 +1379,30 @@ function drawTile(x, y, color, layer){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
 
-  // Draw tile depth
-  saveCTX.fillStyle = color.depth;
-  saveCTX.strokeStyle = color.depth;
+  var lineFill = 0.1;
+
+  // Draw tile depth south
+  saveCTX.fillStyle = color.south;
+  saveCTX.strokeStyle = color.south;
   saveCTX.beginPath();
-  saveCTX.lineWidth = 0.1;
-  saveCTX.moveTo(offX, offY + tileH / 2);
-  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth);
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth);
-  saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth);
-  saveCTX.lineTo(offX + tileW, (offY + tileH / 2));
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX, offY + tileH / 2); // <
+  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
+  saveCTX.stroke();
+  saveCTX.fill();
+  saveCTX.closePath();
+
+  // Draw tile depth east
+  saveCTX.fillStyle = color.east;
+  saveCTX.strokeStyle = color.east;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX + tileW, (offY + tileH / 2)); // >
+  saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth); // |
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // /
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
   saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
@@ -1321,7 +1411,7 @@ function drawTile(x, y, color, layer){
   saveCTX.fillStyle = color.base;
   saveCTX.strokeStyle = color.base;
   saveCTX.beginPath();
-  saveCTX.lineWidth = 0.1;
+  saveCTX.lineWidth = lineFill;
   saveCTX.moveTo(offX, offY + tileH / 2);
   saveCTX.lineTo(offX + tileW / 2, offY, offX + tileW, offY + tileH / 2);
   saveCTX.lineTo(offX + tileW, offY + tileH / 2, offX + tileW / 2, offY + tileH);
@@ -1348,8 +1438,6 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
   var k = 0;
   for(var y = offY; y < offY + sizeY; ++y){
     for(var x = offX; x < offX + sizeX; ++x){
-
-      console.log('x: ' + x + ', y: ' + y);
 
       if(thisSprite[k]){
         thisCTX.fillStyle = thisSprite[k];

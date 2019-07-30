@@ -20,6 +20,9 @@ var greens = [
   '#3D9'
 ];
 
+var speedX = 0,
+    speedY = 0;
+
 var tileIndex = 0;
 
 var selectedTileX = -1,
@@ -28,21 +31,25 @@ var selectedTileX = -1,
 var tiles = {
   grass: {
     base: '#2F5',
-    depth: '#0B1'
+    south: '#0B4',
+    east: '#3E1'
   },
   water: {
     base: '#88F',
-    depth: '#44B'
+    south: '#44D',
+    east: '#77B'
   },
   rock: {
     base: '#A77',
-    depth: '#755'
+    south: '#758',
+    east: '#A85'
   },
   lava: {
     base: '#F33',
-    depth: '#B00'
+    south: '#B03',
+    east: '#E30'
   }
-}
+};
 
 var r = '#F00';
 var d = '#B00';
@@ -62,12 +69,12 @@ var player = [
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
+  b,d,d,d,d,d,d,d,d,b,
   b,d,d,d,d,d,d,d,d,b,
   b,b,d,d,d,d,d,d,b,b,
-  0,0,b,b,d,d,b,b,0,0,
-  0,0,0,0,b,b,0,0,0,0,
+  0,b,b,b,d,d,b,b,b,0,
+  0,0,0,b,b,b,b,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0
 ];
 
@@ -456,12 +463,43 @@ var map = [
   ],
 
   [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
     0,
     {
       tile: tiles.grass,
       sprite: 0
     },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0
+  ],
+
+  [
     0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0,
     0
   ],
@@ -481,17 +519,6 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: player
-    },
-    0,
-    0,
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
       sprite: 0
     },
     0,
@@ -507,18 +534,10 @@ var map = [
     },
     0,
     0,
-    0
-  ],
-
-  [
-    0,
     {
       tile: tiles.grass,
       sprite: 0
-    },
-    0,
-    0,
-    0
+    }
   ],
 
   [
@@ -529,7 +548,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -571,13 +593,30 @@ var map = [
   ],
 
   [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
+    0,
+    0,
+    0,
+    0
+  ],
+
+  [
+    {
+      tile: tiles.lava,
+      sprite: 0
+    },
     0,
     {
       tile: tiles.grass,
       sprite: 0
     },
-    0,
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0
   ],
 
@@ -591,34 +630,6 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0,
-    0
-  ],
-
-  [
-    0,
-    {
-      tile: tiles.grass,
-      sprite: 0
-    },
-    0,
     0,
     0
   ],
@@ -643,6 +654,20 @@ var map = [
     0,
     0,
     0
+  ],
+
+  [
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    0,
+    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
   [
@@ -653,7 +678,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -695,11 +723,11 @@ var map = [
   ],
 
   [
-    0,
     {
-      tile: tiles.grass,
+      tile: tiles.lava,
       sprite: 0
     },
+    0,
     0,
     0,
     0
@@ -766,7 +794,10 @@ var map = [
     },
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
   [
@@ -777,7 +808,10 @@ var map = [
     0,
     0,
     0,
-    0
+    {
+      tile: tiles.grass,
+      sprite: 0
+    }
   ],
 
 
@@ -972,7 +1006,10 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
+    {
+      tile: tiles.rock,
+      sprite: 0
+    },
     0,
     0
   ],
