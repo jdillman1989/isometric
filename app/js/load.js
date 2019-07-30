@@ -44,6 +44,8 @@ function drawGame(map){
     layer = layer - layerDepth;
 
   }
+
+  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
 }
 
 function drawTile(x, y, color, layer){
@@ -117,4 +119,29 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
       k++;
     }
   }
+}
+
+function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+
+  // NO DELETE. Need this to convert tile coords to pixel coords
+  // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
+  // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
+
+  var offX = posX + speedX;
+  var offY = posY + speedY;
+
+  var k = 0;
+  for(var y = offY; y < offY + sizeY; ++y){
+    for(var x = offX; x < offX + sizeX; ++x){
+
+      if(thisSprite[k]){
+        thisCTX.fillStyle = thisSprite[k];
+        thisCTX.fillRect(x, y, 1, 1);
+      }
+      k++;
+    }
+  }
+
+  player.x = offX;
+  player.y = offY;
 }

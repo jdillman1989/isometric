@@ -23,6 +23,13 @@ var greens = [
 var speedX = 0,
     speedY = 0;
 
+var keys = {
+  up: false,
+  down: false,
+  left: false,
+  right: false
+};
+
 var tileIndex = 0;
 
 var selectedTileX = -1,
@@ -55,7 +62,8 @@ var r = '#F00';
 var d = '#B00';
 var b = '#0B1';
 
-var player = [
+var player = {x:3, y:3, width: 10, height: 20};
+var playerSprite = [
   0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,r,r,0,0,0,0,
   0,0,r,r,r,r,r,r,0,0,
@@ -949,7 +957,7 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: player
+      sprite: playerSprite
     },
     0,
     0,

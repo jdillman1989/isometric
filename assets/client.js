@@ -23,6 +23,13 @@ var greens = [
 var speedX = 0,
     speedY = 0;
 
+var keys = {
+  up: false,
+  down: false,
+  left: false,
+  right: false
+};
+
 var tileIndex = 0;
 
 var selectedTileX = -1,
@@ -55,7 +62,8 @@ var r = '#F00';
 var d = '#B00';
 var b = '#0B1';
 
-var player = [
+var player = {x:3, y:3, width: 10, height: 20};
+var playerSprite = [
   0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,r,r,0,0,0,0,
   0,0,r,r,r,r,r,r,0,0,
@@ -949,7 +957,7 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: player
+      sprite: playerSprite
     },
     0,
     0,
@@ -1284,48 +1292,98 @@ window.onload = function(){
   saveCTX = saveCanvas.getContext("2d");
   var rect = saveCanvas.getBoundingClientRect();
 
-  $(window).on('mousemove', function(e) {
+  // $(window).on('mousemove', function(e) {
     
-    var x = (e.clientX - rect.left) / 4,
-        y = (e.clientY - rect.top) / 4;
+  //   var x = (e.clientX - rect.left) / 4,
+  //       y = (e.clientY - rect.top) / 4;
 
-    var xCoord = (x - (tileW / 2) - originX);
-    var yCoord = (y - (tileH / 2) - originY);
-    var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
-    var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+  //   var xCoord = (x - (tileW / 2) - originX);
+  //   var yCoord = (y - (tileH / 2) - originY);
+  //   var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+  //   var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
 
-    selectedTileX = tileX;
-    selectedTileY = tileY;
+  //   selectedTileX = tileX;
+  //   selectedTileY = tileY;
 
-    drawGame(map);
-  });
+  //   drawGame(map);
+  // });
 
-  $(document).keydown(function(e) {
-
+  window.onkeydown = function(e) {
     switch(e.which) {
 
       case 87: // W
-        speedY = -1;
+        keys.up = true;
         break;
 
       case 65: // A
-        speedX = -2;
+        keys.left = true;
         break;
 
       case 83: // S
-        speedY = 1;
+        keys.down = true;
         break;
 
       case 68: // D
-        speedX = 2;
+        keys.right = true;
         break;
-    }
+    };
+  };
 
-    drawGame(map);
-  });
+  window.onkeyup = function(e) {
+    switch(e.which) {
+
+      case 87: // W
+        keys.up = false;
+        break;
+
+      case 65: // A
+        keys.left = false;
+        break;
+
+      case 83: // S
+        keys.down = false;
+        break;
+
+      case 68: // D
+        keys.right = false;
+        break;
+    };
+  };
 
   drawGame(map);
+  window.requestAnimationFrame(function(){
+    animateMove();
+  });
 };
+
+function animateMove(){
+
+  if(keys.up){
+    console.log(keys.up);
+    speedY = -1;
+  }
+  else if(keys.down){
+    speedY = 1;
+  }
+  else{
+    speedY = 0;
+  }
+
+  if(keys.left){
+    speedX = -2;
+  }
+  else if(keys.right){
+    speedX = 2;
+  }
+  else{
+    speedX = 0;
+  }
+
+  drawGame(map);
+  window.requestAnimationFrame(function(){
+    animateMove();
+  });
+}
 
 function drawGame(map){
   saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
@@ -1373,6 +1431,8 @@ function drawGame(map){
     layer = layer - layerDepth;
 
   }
+
+  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
 }
 
 function drawTile(x, y, color, layer){
@@ -1446,4 +1506,29 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
       k++;
     }
   }
+}
+
+function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+
+  // NO DELETE. Need this to convert tile coords to pixel coords
+  // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
+  // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
+
+  var offX = posX + speedX;
+  var offY = posY + speedY;
+
+  var k = 0;
+  for(var y = offY; y < offY + sizeY; ++y){
+    for(var x = offX; x < offX + sizeX; ++x){
+
+      if(thisSprite[k]){
+        thisCTX.fillStyle = thisSprite[k];
+        thisCTX.fillRect(x, y, 1, 1);
+      }
+      k++;
+    }
+  }
+
+  player.x = offX;
+  player.y = offY;
 }
