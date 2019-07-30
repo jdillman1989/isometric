@@ -5,10 +5,10 @@ var saveCanvas = null;
 var saveCTX = null;
 
 // Static Globals
-var tileW = 24,
+var tileW = 20,
     tileH = tileW / 2,
-    mapW = 5,
-    mapH = 5,
+    mapW = 10,
+    mapH = 10,
     originX = 0,
     originY = 72,
     layerDepth = 5;
@@ -25,80 +25,51 @@ var tileIndex = 0;
 var selectedTileX = -1,
     selectedTileY = -1;
 
-var mapMulti = [
-  [
-    2,1,1,2,2, // top corner
-    2,1,1,1,2,
-    2,1,1,1,2,
-    2,1,1,1,2,
-    2,2,1,2,2
-  ],
-  [
-    0,1,1,0,0, // top corner
-    0,1,1,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0
-  ],
-  [
-    0,1,1,0,0, // top corner
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0,
-    0,0,0,0,0
-  ]
-];
-
-var mapSingle = [
-  [2,0,0,0], // left corner
-  [2,1,1,0],
-  [2,1,1,0],
-  [2,0,0,0],
-  [2,0,1,0], // top corner
-
-  [2,0,0,0],
-  [2,1,0,0],
-  [2,1,0,0],
-  [2,1,0,0],
-  [2,0,0,0],
-
-  [2,0,0,0],
-  [2,1,3,0],
-  [2,0,0,0],
-  [2,1,0,0],
-  [2,0,0,0],
-
-  [2,0,0,0],
-  [2,1,0,0],
-  [2,1,0,0],
-  [2,1,0,0],
-  [2,0,0,0],
-
-  [2,0,0,0], // bottom corner [2,0,0,0],
-  [2,0,0,0],
-  [2,0,0,0],
-  [2,0,0,0],
-  [2,0,0,0] // right corner
-];
-
 var tiles = {
   grass: {
-    base: '',
-    depth: ''
+    base: '#2F5',
+    depth: '#0B1'
   },
   water: {
-    base: '',
-    depth: ''
-  }
+    base: '#88F',
+    depth: '#44B'
+  },
   rock: {
-    base: '',
-    depth: ''
-  }
+    base: '#A77',
+    depth: '#755'
+  },
   lava: {
-    base: '',
-    depth: ''
+    base: '#F33',
+    depth: '#B00'
   }
 }
+
+var r = '#F00';
+var d = '#B00';
+var b = '#0B1';
+
+var player = [
+  0,0,0,0,0,0,0,0,0,0,
+  0,0,0,0,r,r,0,0,0,0,
+  0,0,r,r,r,r,r,r,0,0,
+  0,r,r,r,r,r,r,r,r,0,
+  0,d,r,r,r,r,r,r,d,0,
+  0,d,d,d,r,r,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  b,d,d,d,d,d,d,d,d,b,
+  b,b,d,d,d,d,d,d,b,b,
+  0,0,b,b,d,d,b,b,0,0,
+  0,0,0,0,b,b,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0
+];
 
 var map = [
 
@@ -510,7 +481,7 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: 0
+      sprite: player
     },
     0,
     0,
@@ -616,8 +587,14 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0
   ],
 
@@ -627,7 +604,10 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0,
     0
   ],
@@ -731,8 +711,14 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0
   ],
 
@@ -742,7 +728,10 @@ var map = [
       tile: tiles.grass,
       sprite: 0
     },
-    0,
+    {
+      tile: tiles.grass,
+      sprite: 0
+    },
     0,
     0
   ],
@@ -926,7 +915,7 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: 0
+      sprite: player
     },
     0,
     0,
@@ -1249,5 +1238,5 @@ var map = [
     0,
     0,
     0
-  ],
-],
+  ]
+];
