@@ -11,21 +11,13 @@ function drawGame(map){
       for(var y = 0; y < mapH; y++) {
 
         var currentPos = ((y*mapW)+x);
-        var color = {base:'',south:'',east:''};
+        var color = {base:'',warm:'',cool:''};
 
         if(map[currentPos][i]){
 
           color.base = map[currentPos][i].tile.base;
-          color.south = map[currentPos][i].tile.south;
-          color.east = map[currentPos][i].tile.east;
-
-          // Check for shadows
-          for(var j = i + 1; j < maxHeight; ++j){
-            if(map[currentPos][j]){
-              color.base = map[currentPos][i].tile.south;
-              break;
-            }
-          }
+          color.warm = map[currentPos][i].tile.warm;
+          color.cool = map[currentPos][i].tile.cool;
 
           if( x == selectedTileX && y == selectedTileY){
             color.base = '#FF0';
@@ -52,29 +44,29 @@ function drawTile(x, y, color, layer){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
 
-  var lineFill = 0.1;
-
-  // Draw tile depth south
-  saveCTX.fillStyle = color.south;
-  saveCTX.strokeStyle = color.south;
-  saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
-  saveCTX.moveTo(offX, offY + tileH / 2); // <
-  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
-  saveCTX.stroke();
-  saveCTX.fill();
-  saveCTX.closePath();
+  var lineFill = 1.1;
 
   // Draw tile depth east
-  saveCTX.fillStyle = color.east;
-  saveCTX.strokeStyle = color.east;
+  saveCTX.fillStyle = color.cool;
+  saveCTX.strokeStyle = color.cool;
   saveCTX.beginPath();
   saveCTX.lineWidth = lineFill;
   saveCTX.moveTo(offX + tileW, (offY + tileH / 2)); // >
   saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth); // |
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // /
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
+  saveCTX.stroke();
+  saveCTX.fill();
+  saveCTX.closePath();
+
+  // Draw tile depth south
+  saveCTX.fillStyle = color.warm;
+  saveCTX.strokeStyle = color.warm;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX, offY + tileH / 2); // <
+  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
   saveCTX.stroke();
   saveCTX.fill();

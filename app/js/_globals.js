@@ -13,13 +13,6 @@ var tileW = 20,
     originY = 72,
     layerDepth = 5;
 
-// Colors
-var greens = [
-  '#2F5',
-  '#6E6',
-  '#3D9'
-];
-
 var speedX = 0,
     speedY = 0;
 
@@ -36,26 +29,10 @@ var selectedTileX = -1,
     selectedTileY = -1;
 
 var tiles = {
-  grass: {
-    base: '#2F5',
-    south: '#0B4',
-    east: '#3E1'
-  },
-  water: {
-    base: '#88F',
-    south: '#44D',
-    east: '#77B'
-  },
-  rock: {
-    base: '#A77',
-    south: '#758',
-    east: '#A85'
-  },
-  lava: {
-    base: '#F33',
-    south: '#B03',
-    east: '#E30'
-  }
+  grass: {r:125,g:196,b:143,a:1},
+  water: {r:86,g:75,b:71,a:1},
+  rock: {r:188,g:167,b:82,a:1},
+  lava: {r:209,g:105,b:42,a:1}
 };
 
 var r = '#F00';
@@ -77,11 +54,11 @@ var playerSprite = [
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
-  b,d,d,d,d,d,d,d,d,b,
-  b,d,d,d,d,d,d,d,d,b,
-  b,b,d,d,d,d,d,d,b,b,
-  0,b,b,b,d,d,b,b,b,0,
-  0,0,0,b,b,b,b,0,0,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,0,d,d,d,d,d,d,0,0,
+  0,0,0,0,d,d,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0
 ];

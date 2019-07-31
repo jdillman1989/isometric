@@ -13,13 +13,6 @@ var tileW = 20,
     originY = 72,
     layerDepth = 5;
 
-// Colors
-var greens = [
-  '#2F5',
-  '#6E6',
-  '#3D9'
-];
-
 var speedX = 0,
     speedY = 0;
 
@@ -36,26 +29,10 @@ var selectedTileX = -1,
     selectedTileY = -1;
 
 var tiles = {
-  grass: {
-    base: '#2F5',
-    south: '#0B4',
-    east: '#3E1'
-  },
-  water: {
-    base: '#88F',
-    south: '#44D',
-    east: '#77B'
-  },
-  rock: {
-    base: '#A77',
-    south: '#758',
-    east: '#A85'
-  },
-  lava: {
-    base: '#F33',
-    south: '#B03',
-    east: '#E30'
-  }
+  grass: {r:125,g:196,b:143,a:1},
+  water: {r:86,g:75,b:71,a:1},
+  rock: {r:188,g:167,b:82,a:1},
+  lava: {r:209,g:105,b:42,a:1}
 };
 
 var r = '#F00';
@@ -77,11 +54,11 @@ var playerSprite = [
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
   0,d,d,d,d,d,d,d,d,0,
-  b,d,d,d,d,d,d,d,d,b,
-  b,d,d,d,d,d,d,d,d,b,
-  b,b,d,d,d,d,d,d,b,b,
-  0,b,b,b,d,d,b,b,b,0,
-  0,0,0,b,b,b,b,0,0,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,d,d,d,d,d,d,d,d,0,
+  0,0,d,d,d,d,d,d,0,0,
+  0,0,0,0,d,d,0,0,0,0,
+  0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,0,0,0,0,0,0
 ];
@@ -1286,6 +1263,146 @@ var map = [
   ]
 ];
 
+function drawGame(map){
+  saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
+
+  var layer = originY;
+
+  maxHeight = map[0].length;
+
+  for(var i = 0; i < maxHeight; ++i){
+
+    for(var x = (mapW - 1); x >= 0; x--) {
+      for(var y = 0; y < mapH; y++) {
+
+        var currentPos = ((y*mapW)+x);
+        var color = {base:'',warm:'',cool:''};
+
+        if(map[currentPos][i]){
+
+          color.base = map[currentPos][i].tile.base;
+          color.warm = map[currentPos][i].tile.warm;
+          color.cool = map[currentPos][i].tile.cool;
+
+          if( x == selectedTileX && y == selectedTileY){
+            color.base = '#FF0';
+          }
+
+          drawTile(x, y, color, layer);
+          tileIndex++;
+
+          if(map[currentPos][i].sprite){
+            drawSprite(saveCTX, x, y, map[currentPos][i].sprite, 10, 20);
+          }
+        }
+      }
+    }
+
+    layer = layer - layerDepth;
+
+  }
+
+  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
+}
+
+function drawTile(x, y, color, layer){
+  var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
+  var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
+
+  var lineFill = 1.1;
+
+  // Draw tile depth east
+  saveCTX.fillStyle = color.cool;
+  saveCTX.strokeStyle = color.cool;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX + tileW, (offY + tileH / 2)); // >
+  saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth); // |
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // /
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
+  saveCTX.stroke();
+  saveCTX.fill();
+  saveCTX.closePath();
+
+  // Draw tile depth south
+  saveCTX.fillStyle = color.warm;
+  saveCTX.strokeStyle = color.warm;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX, offY + tileH / 2); // <
+  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
+  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
+  saveCTX.stroke();
+  saveCTX.fill();
+  saveCTX.closePath();
+
+  // Draw tile surface
+  saveCTX.fillStyle = color.base;
+  saveCTX.strokeStyle = color.base;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = lineFill;
+  saveCTX.moveTo(offX, offY + tileH / 2);
+  saveCTX.lineTo(offX + tileW / 2, offY, offX + tileW, offY + tileH / 2);
+  saveCTX.lineTo(offX + tileW, offY + tileH / 2, offX + tileW / 2, offY + tileH);
+  saveCTX.lineTo(offX + tileW / 2, offY + tileH, offX, offY + tileH / 2);
+  saveCTX.stroke();
+  saveCTX.fill();
+  saveCTX.closePath();
+}
+
+function drawLine(x1, y1, x2, y2, color) {
+  saveCTX.strokeStyle = color;
+  saveCTX.beginPath();
+  saveCTX.lineWidth = 1;
+  saveCTX.moveTo(x1, y1);
+  saveCTX.lineTo(x2, y2);
+  saveCTX.stroke();
+}
+
+function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+
+  var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2);
+  var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2);
+
+  var k = 0;
+  for(var y = offY; y < offY + sizeY; ++y){
+    for(var x = offX; x < offX + sizeX; ++x){
+
+      if(thisSprite[k]){
+        thisCTX.fillStyle = thisSprite[k];
+        thisCTX.fillRect(x, y, 1, 1);
+      }
+      k++;
+    }
+  }
+}
+
+function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+
+  // NO DELETE. Need this to convert tile coords to pixel coords
+  // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
+  // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
+
+  var offX = posX + speedX;
+  var offY = posY + speedY;
+
+  var k = 0;
+  for(var y = offY; y < offY + sizeY; ++y){
+    for(var x = offX; x < offX + sizeX; ++x){
+
+      if(thisSprite[k]){
+        thisCTX.fillStyle = thisSprite[k];
+        thisCTX.fillRect(x, y, 1, 1);
+      }
+      k++;
+    }
+  }
+
+  player.x = offX;
+  player.y = offY;
+}
+
 window.onload = function(){
 
   saveCanvas = document.getElementById('save');
@@ -1307,6 +1424,29 @@ window.onload = function(){
 
   //   drawGame(map);
   // });
+
+  // Pre-render colors
+  for(var i = 0; i < map.length; ++i){
+    for(var j = 0; j < map[i].length; ++j){
+      if(map[i][j]){
+        var tileColorSet = colorSet(map[i][j].tile);
+        map[i][j].tile = {
+          base: toColor(tileColorSet.layers[j]),
+          warm: toColor(tileColorSet.warm),
+          cool: toColor(tileColorSet.cool)
+        };
+
+        // Check for shadows
+        for(var k = j + 1; k < maxHeight; ++k){
+          if(map[i][k]){
+            map[i][j].tile.base = toColor(tileColorSet.cool);
+            break;
+          }
+        }
+
+      }
+    }
+  }
 
   window.onkeydown = function(e) {
     switch(e.which) {
@@ -1385,150 +1525,56 @@ function animateMove(){
   });
 }
 
-function drawGame(map){
-  saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
+function toColor(colorObj){
+  return 'rgba(' + colorValLimit(colorObj.r) + ',' + colorValLimit(colorObj.g) + ',' + colorValLimit(colorObj.b) + ',' + colorObj.a + ')';
+}
 
-  var layer = originY;
+function colorValLimit(color){
+  if(color >= 255){
+    color = 255;
+  }
+
+  if(color <= 0){
+    color = 0;
+  }
+
+  return Math.round(color);
+}
+
+function colorSet(color){
+
+  var colorCool = {
+    r:color.r - 90,
+    g:color.g - 20,
+    b:color.b - 10,
+    a:color.a
+  };
+
+  var colorWarm = {
+    r:color.r - 10,
+    g:color.g - 20,
+    b:color.b - 90,
+    a:color.a
+  };
 
   maxHeight = map[0].length;
+  var layerColors = [];
 
   for(var i = 0; i < maxHeight; ++i){
-
-    for(var x = (mapW - 1); x >= 0; x--) {
-      for(var y = 0; y < mapH; y++) {
-
-        var currentPos = ((y*mapW)+x);
-        var color = {base:'',south:'',east:''};
-
-        if(map[currentPos][i]){
-
-          color.base = map[currentPos][i].tile.base;
-          color.south = map[currentPos][i].tile.south;
-          color.east = map[currentPos][i].tile.east;
-
-          // Check for shadows
-          for(var j = i + 1; j < maxHeight; ++j){
-            if(map[currentPos][j]){
-              color.base = map[currentPos][i].tile.south;
-              break;
-            }
-          }
-
-          if( x == selectedTileX && y == selectedTileY){
-            color.base = '#FF0';
-          }
-
-          drawTile(x, y, color, layer);
-          tileIndex++;
-
-          if(map[currentPos][i].sprite){
-            drawSprite(saveCTX, x, y, map[currentPos][i].sprite, 10, 20);
-          }
-        }
-      }
-    }
-
-    layer = layer - layerDepth;
-
+    layerColors.push({
+      r:color.r + (15 * i),
+      g:color.g + (15 * i),
+      b:color.b + (12 * i),
+      a:color.a
+    });
   }
 
-  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
-}
+  var colorObj = {
+    base: color,
+    layers: layerColors,
+    cool: colorCool,
+    warm: colorWarm
+  };
 
-function drawTile(x, y, color, layer){
-  var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
-  var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
-
-  var lineFill = 0.1;
-
-  // Draw tile depth south
-  saveCTX.fillStyle = color.south;
-  saveCTX.strokeStyle = color.south;
-  saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
-  saveCTX.moveTo(offX, offY + tileH / 2); // <
-  saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
-  saveCTX.stroke();
-  saveCTX.fill();
-  saveCTX.closePath();
-
-  // Draw tile depth east
-  saveCTX.fillStyle = color.east;
-  saveCTX.strokeStyle = color.east;
-  saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
-  saveCTX.moveTo(offX + tileW, (offY + tileH / 2)); // >
-  saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth); // |
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // /
-  saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
-  saveCTX.stroke();
-  saveCTX.fill();
-  saveCTX.closePath();
-
-  // Draw tile surface
-  saveCTX.fillStyle = color.base;
-  saveCTX.strokeStyle = color.base;
-  saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
-  saveCTX.moveTo(offX, offY + tileH / 2);
-  saveCTX.lineTo(offX + tileW / 2, offY, offX + tileW, offY + tileH / 2);
-  saveCTX.lineTo(offX + tileW, offY + tileH / 2, offX + tileW / 2, offY + tileH);
-  saveCTX.lineTo(offX + tileW / 2, offY + tileH, offX, offY + tileH / 2);
-  saveCTX.stroke();
-  saveCTX.fill();
-  saveCTX.closePath();
-}
-
-function drawLine(x1, y1, x2, y2, color) {
-  saveCTX.strokeStyle = color;
-  saveCTX.beginPath();
-  saveCTX.lineWidth = 1;
-  saveCTX.moveTo(x1, y1);
-  saveCTX.lineTo(x2, y2);
-  saveCTX.stroke();
-}
-
-function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
-
-  var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2);
-  var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2);
-
-  var k = 0;
-  for(var y = offY; y < offY + sizeY; ++y){
-    for(var x = offX; x < offX + sizeX; ++x){
-
-      if(thisSprite[k]){
-        thisCTX.fillStyle = thisSprite[k];
-        thisCTX.fillRect(x, y, 1, 1);
-      }
-      k++;
-    }
-  }
-}
-
-function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
-
-  // NO DELETE. Need this to convert tile coords to pixel coords
-  // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
-  // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
-
-  var offX = posX + speedX;
-  var offY = posY + speedY;
-
-  var k = 0;
-  for(var y = offY; y < offY + sizeY; ++y){
-    for(var x = offX; x < offX + sizeX; ++x){
-
-      if(thisSprite[k]){
-        thisCTX.fillStyle = thisSprite[k];
-        thisCTX.fillRect(x, y, 1, 1);
-      }
-      k++;
-    }
-  }
-
-  player.x = offX;
-  player.y = offY;
+  return colorObj;
 }

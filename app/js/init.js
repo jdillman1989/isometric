@@ -20,6 +20,29 @@ window.onload = function(){
   //   drawGame(map);
   // });
 
+  // Pre-render colors
+  for(var i = 0; i < map.length; ++i){
+    for(var j = 0; j < map[i].length; ++j){
+      if(map[i][j]){
+        var tileColorSet = colorSet(map[i][j].tile);
+        map[i][j].tile = {
+          base: toColor(tileColorSet.layers[j]),
+          warm: toColor(tileColorSet.warm),
+          cool: toColor(tileColorSet.cool)
+        };
+
+        // Check for shadows
+        for(var k = j + 1; k < maxHeight; ++k){
+          if(map[i][k]){
+            map[i][j].tile.base = toColor(tileColorSet.cool);
+            break;
+          }
+        }
+
+      }
+    }
+  }
+
   window.onkeydown = function(e) {
     switch(e.which) {
 
@@ -67,32 +90,3 @@ window.onload = function(){
     animateMove();
   });
 };
-
-function animateMove(){
-
-  if(keys.up){
-    console.log(keys.up);
-    speedY = -1;
-  }
-  else if(keys.down){
-    speedY = 1;
-  }
-  else{
-    speedY = 0;
-  }
-
-  if(keys.left){
-    speedX = -2;
-  }
-  else if(keys.right){
-    speedX = 2;
-  }
-  else{
-    speedX = 0;
-  }
-
-  drawGame(map);
-  window.requestAnimationFrame(function(){
-    animateMove();
-  });
-}
