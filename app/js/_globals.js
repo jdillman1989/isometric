@@ -9,8 +9,8 @@ var tileW = 20,
     tileH = tileW / 2,
     mapW = 10,
     mapH = 10,
-    originX = 0,
-    originY = 72,
+    originX = 0.5,
+    originY = 72.5,
     layerDepth = 5;
 
 var speedX = 0,
@@ -30,7 +30,7 @@ var selectedTileX = -1,
 
 var tiles = {
   grass: {r:125,g:196,b:143,a:1},
-  water: {r:86,g:75,b:71,a:1},
+  water: {r:86,g:75,b:100,a:1},
   rock: {r:188,g:167,b:82,a:1},
   lava: {r:209,g:105,b:42,a:1}
 };
@@ -39,7 +39,7 @@ var r = '#F00';
 var d = '#B00';
 var b = '#0B1';
 
-var player = {x:3, y:3, width: 10, height: 20};
+var player = {x:100, y:75, width: 10, height: 20};
 var playerSprite = [
   0,0,0,0,0,0,0,0,0,0,
   0,0,0,0,r,r,0,0,0,0,
@@ -934,7 +934,7 @@ var map = [
     0,
     {
       tile: tiles.grass,
-      sprite: playerSprite
+      sprite: 0
     },
     0,
     0,

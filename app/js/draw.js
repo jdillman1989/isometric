@@ -44,7 +44,7 @@ function drawTile(x, y, color, layer){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
 
-  var lineFill = 1.1;
+  var lineFill = 1;
 
   // Draw tile depth east
   saveCTX.fillStyle = color.cool;
