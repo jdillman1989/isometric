@@ -1,25 +1,45 @@
 function animateMove(){
 
   if(keys.up){
-    console.log(keys.up);
-    speedY = -1;
+    speedY = -0.2;
   }
   else if(keys.down){
-    speedY = 1;
+    speedY = 0.2;
   }
   else{
     speedY = 0;
   }
 
   if(keys.left){
-    speedX = -2;
+    speedX = -0.4;
   }
   else if(keys.right){
-    speedX = 2;
+    speedX = 0.4;
   }
   else{
     speedX = 0;
   }
+
+
+
+
+
+  // How to change player coordinates and relate them to tiles?
+  var rect = saveCanvas.getBoundingClientRect();
+  var x = player.x + player.sprite.originX,
+      y = player.y + player.sprite.originY;
+  var xCoord = (x - (tileW / 2) - originX);
+  var yCoord = (y - (tileH / 2) - originY);
+  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+  selectedTileX = tileX;
+  selectedTileY = tileY;
+
+
+
+
+
+
 
   drawGame(map);
   window.requestAnimationFrame(function(){

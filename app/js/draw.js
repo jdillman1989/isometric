@@ -1,5 +1,6 @@
 function drawGame(map){
   saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
+  tileIndex = 0;
 
   var layer = originY;
 
@@ -19,12 +20,34 @@ function drawGame(map){
           color.warm = map[currentPos][i].tile.warm;
           color.cool = map[currentPos][i].tile.cool;
 
-          if( x == selectedTileX && y == selectedTileY){
-            color.base = '#FF0';
+          drawTile(x, y, color, layer, false);
+          tileIndex++;
+
+
+
+
+
+
+
+          // When to draw player in tile order? How to make sure player is on top tile layer?
+          var top = true;
+          for(var k = i + 1; k < maxHeight; ++k){
+            if(map[currentPos][i]){
+              top = false;
+            }
           }
 
-          drawTile(x, y, color, layer);
-          tileIndex++;
+          if(x == selectedTileX && y == selectedTileY && top){
+            drawPlayer(saveCTX, player.x, player.y, player.sprite.render, player.width, player.height);
+          }
+
+
+
+
+
+
+
+
 
           if(map[currentPos][i].sprite){
             drawSprite(saveCTX, x, y, map[currentPos][i].sprite, 10, 20);
@@ -37,10 +60,13 @@ function drawGame(map){
 
   }
 
-  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
+
+
+  saveCTX.fillStyle = '#FF0';
+  saveCTX.fillRect(selectedTileX, selectedTileY, 1, 1);
 }
 
-function drawTile(x, y, color, layer){
+function drawTile(x, y, color, layer, test){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
 
@@ -84,6 +110,13 @@ function drawTile(x, y, color, layer){
   saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
+
+  if(test){
+
+    saveCTX.fillStyle = 'orange';
+    saveCTX.font = "7px Arial";
+    saveCTX.fillText(test, (offX + 6), (offY + 6));
+  }
 }
 
 function drawLine(x1, y1, x2, y2, color) {

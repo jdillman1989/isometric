@@ -13,9 +13,6 @@ var tileW = 20,
     originY = 72.5,
     layerDepth = 5;
 
-var speedX = 0,
-    speedY = 0;
-
 var keys = {
   up: false,
   down: false,
@@ -25,9 +22,6 @@ var keys = {
 
 var tileIndex = 0;
 
-var selectedTileX = -1,
-    selectedTileY = -1;
-
 var tiles = {
   grass: {r:125,g:196,b:143,a:1},
   water: {r:86,g:75,b:100,a:1},
@@ -35,33 +29,67 @@ var tiles = {
   lava: {r:209,g:105,b:42,a:1}
 };
 
+
+
+
+
+
+
+
+
+
+
+
+// Where to store player position? How to store sprite origin?
+
 var r = '#F00';
 var d = '#B00';
 var b = '#0B1';
 
-var player = {x:100, y:75, width: 10, height: 20};
-var playerSprite = [
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,r,r,0,0,0,0,
-  0,0,r,r,r,r,r,r,0,0,
-  0,r,r,r,r,r,r,r,r,0,
-  0,d,r,r,r,r,r,r,d,0,
-  0,d,d,d,r,r,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,0,d,d,d,d,d,d,0,0,
-  0,0,0,0,d,d,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0
-];
+var playerSprite = {
+  originX: 5,
+  originY: 14,
+  render: [
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,r,r,0,0,0,0,
+    0,0,r,r,r,r,r,r,0,0,
+    0,r,r,r,r,r,r,r,r,0,
+    0,d,r,r,r,r,r,r,d,0,
+    0,d,d,d,r,r,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,0,d,d,d,d,d,d,0,0,
+    0,0,0,0,d,d,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0
+  ]
+};
+var player = {x:100, y:75, width: 10, height: 18, sprite: playerSprite};
+
+var speedX = 0,
+    speedY = 0;
+
+var selectedTileX = player.x + player.sprite.originX,
+    selectedTileY = player.y + player.sprite.originY;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var map = [
 

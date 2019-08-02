@@ -13,9 +13,6 @@ var tileW = 20,
     originY = 72.5,
     layerDepth = 5;
 
-var speedX = 0,
-    speedY = 0;
-
 var keys = {
   up: false,
   down: false,
@@ -25,9 +22,6 @@ var keys = {
 
 var tileIndex = 0;
 
-var selectedTileX = -1,
-    selectedTileY = -1;
-
 var tiles = {
   grass: {r:125,g:196,b:143,a:1},
   water: {r:86,g:75,b:100,a:1},
@@ -35,33 +29,67 @@ var tiles = {
   lava: {r:209,g:105,b:42,a:1}
 };
 
+
+
+
+
+
+
+
+
+
+
+
+// Where to store player position? How to store sprite origin?
+
 var r = '#F00';
 var d = '#B00';
 var b = '#0B1';
 
-var player = {x:100, y:75, width: 10, height: 20};
-var playerSprite = [
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,r,r,0,0,0,0,
-  0,0,r,r,r,r,r,r,0,0,
-  0,r,r,r,r,r,r,r,r,0,
-  0,d,r,r,r,r,r,r,d,0,
-  0,d,d,d,r,r,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,d,d,d,d,d,d,d,d,0,
-  0,0,d,d,d,d,d,d,0,0,
-  0,0,0,0,d,d,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0,
-  0,0,0,0,0,0,0,0,0,0
-];
+var playerSprite = {
+  originX: 5,
+  originY: 14,
+  render: [
+    0,0,0,0,0,0,0,0,0,0,
+    0,0,0,0,r,r,0,0,0,0,
+    0,0,r,r,r,r,r,r,0,0,
+    0,r,r,r,r,r,r,r,r,0,
+    0,d,r,r,r,r,r,r,d,0,
+    0,d,d,d,r,r,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,d,d,d,d,d,d,d,d,0,
+    0,0,d,d,d,d,d,d,0,0,
+    0,0,0,0,d,d,0,0,0,0,
+    0,0,0,0,0,0,0,0,0,0
+  ]
+};
+var player = {x:100, y:75, width: 10, height: 18, sprite: playerSprite};
+
+var speedX = 0,
+    speedY = 0;
+
+var selectedTileX = player.x + player.sprite.originX,
+    selectedTileY = player.y + player.sprite.originY;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var map = [
 
@@ -1265,6 +1293,7 @@ var map = [
 
 function drawGame(map){
   saveCTX.clearRect(0, 0, saveCanvas.width, saveCanvas.height);
+  tileIndex = 0;
 
   var layer = originY;
 
@@ -1284,12 +1313,34 @@ function drawGame(map){
           color.warm = map[currentPos][i].tile.warm;
           color.cool = map[currentPos][i].tile.cool;
 
-          if( x == selectedTileX && y == selectedTileY){
-            color.base = '#FF0';
+          drawTile(x, y, color, layer, false);
+          tileIndex++;
+
+
+
+
+
+
+
+          // When to draw player in tile order? How to make sure player is on top tile layer?
+          var top = true;
+          for(var k = i + 1; k < maxHeight; ++k){
+            if(map[currentPos][i]){
+              top = false;
+            }
           }
 
-          drawTile(x, y, color, layer);
-          tileIndex++;
+          if(x == selectedTileX && y == selectedTileY && top){
+            drawPlayer(saveCTX, player.x, player.y, player.sprite.render, player.width, player.height);
+          }
+
+
+
+
+
+
+
+
 
           if(map[currentPos][i].sprite){
             drawSprite(saveCTX, x, y, map[currentPos][i].sprite, 10, 20);
@@ -1302,10 +1353,13 @@ function drawGame(map){
 
   }
 
-  drawPlayer(saveCTX, player.x, player.y, playerSprite, player.width, player.height);
+
+
+  saveCTX.fillStyle = '#FF0';
+  saveCTX.fillRect(selectedTileX, selectedTileY, 1, 1);
 }
 
-function drawTile(x, y, color, layer){
+function drawTile(x, y, color, layer, test){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
 
@@ -1349,6 +1403,13 @@ function drawTile(x, y, color, layer){
   saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
+
+  if(test){
+
+    saveCTX.fillStyle = 'orange';
+    saveCTX.font = "7px Arial";
+    saveCTX.fillText(test, (offX + 6), (offY + 6));
+  }
 }
 
 function drawLine(x1, y1, x2, y2, color) {
@@ -1495,25 +1556,45 @@ window.onload = function(){
 function animateMove(){
 
   if(keys.up){
-    console.log(keys.up);
-    speedY = -1;
+    speedY = -0.2;
   }
   else if(keys.down){
-    speedY = 1;
+    speedY = 0.2;
   }
   else{
     speedY = 0;
   }
 
   if(keys.left){
-    speedX = -2;
+    speedX = -0.4;
   }
   else if(keys.right){
-    speedX = 2;
+    speedX = 0.4;
   }
   else{
     speedX = 0;
   }
+
+
+
+
+
+  // How to change player coordinates and relate them to tiles?
+  var rect = saveCanvas.getBoundingClientRect();
+  var x = player.x + player.sprite.originX,
+      y = player.y + player.sprite.originY;
+  var xCoord = (x - (tileW / 2) - originX);
+  var yCoord = (y - (tileH / 2) - originY);
+  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+  selectedTileX = tileX;
+  selectedTileY = tileY;
+
+
+
+
+
+
 
   drawGame(map);
   window.requestAnimationFrame(function(){
