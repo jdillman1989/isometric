@@ -4,6 +4,11 @@ window.onload = function(){
   saveCTX = saveCanvas.getContext("2d");
   var rect = saveCanvas.getBoundingClientRect();
 
+  var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+
+  selectedTileX = selectedTiles.x;
+  selectedTileY = selectedTiles.y;
+
   // $(window).on('mousemove', function(e) {
   //   var x = (e.clientX - rect.left) / 4,
   //       y = (e.clientY - rect.top) / 4;
@@ -83,6 +88,6 @@ window.onload = function(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
-    animateMove();
+    // animateMove();
   });
 };

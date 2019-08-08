@@ -25,15 +25,10 @@ function animateMove(){
 
 
   // How to change player coordinates and relate them to tiles?
-  var rect = saveCanvas.getBoundingClientRect();
-  var x = player.x + player.sprite.originX,
-      y = player.y + player.sprite.originY;
-  var xCoord = (x - (tileW / 2) - originX);
-  var yCoord = (y - (tileH / 2) - originY);
-  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
-  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
-  selectedTileX = tileX;
-  selectedTileY = tileY;
+
+  var tileXY = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  selectedTileX = tileXY.x;
+  selectedTileY = tileXY.y;
 
 
 
@@ -99,4 +94,14 @@ function colorSet(color){
   };
 
   return colorObj;
+}
+
+function coordsToTiles(x, y){
+  var rect = saveCanvas.getBoundingClientRect();
+
+  var xCoord = (x - (tileW / 2) - originX);
+  var yCoord = (y - (tileH / 2) - originY);
+  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+  return {x: tileX, y: tileY};
 }

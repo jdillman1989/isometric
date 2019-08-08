@@ -70,13 +70,13 @@ var playerSprite = {
     0,0,0,0,0,0,0,0,0,0
   ]
 };
-var player = {x:100, y:75, width: 10, height: 18, sprite: playerSprite};
+var player = {x:100, y:0, width: 10, height: 18, sprite: playerSprite};
 
 var speedX = 0,
     speedY = 0;
 
-var selectedTileX = player.x + player.sprite.originX,
-    selectedTileY = player.y + player.sprite.originY;
+var selectedTileX = 0,
+    selectedTileY = 0;
 
 
 

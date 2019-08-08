@@ -70,13 +70,13 @@ var playerSprite = {
     0,0,0,0,0,0,0,0,0,0
   ]
 };
-var player = {x:100, y:75, width: 10, height: 18, sprite: playerSprite};
+var player = {x:100, y:0, width: 10, height: 18, sprite: playerSprite};
 
 var speedX = 0,
     speedY = 0;
 
-var selectedTileX = player.x + player.sprite.originX,
-    selectedTileY = player.y + player.sprite.originY;
+var selectedTileX = 0,
+    selectedTileY = 0;
 
 
 
@@ -1325,13 +1325,13 @@ function drawGame(map){
           // When to draw player in tile order? How to make sure player is on top tile layer?
           var top = true;
           for(var k = i + 1; k < maxHeight; ++k){
-            if(map[currentPos][i]){
+            if(map[currentPos][k]){
               top = false;
             }
           }
 
           if(x == selectedTileX && y == selectedTileY && top){
-            drawPlayer(saveCTX, player.x, player.y, player.sprite.render, player.width, player.height);
+            drawPlayer(saveCTX, player.x, player.y, layer, player.sprite.render, player.width, player.height);
           }
 
 
@@ -1439,11 +1439,13 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
   }
 }
 
-function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+function drawPlayer(thisCTX, posX, posY, layer, thisSprite, sizeX, sizeY){
 
   // NO DELETE. Need this to convert tile coords to pixel coords
   // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
   // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
+
+  posY = posY + layer;
 
   var offX = posX + speedX;
   var offY = posY + speedY;
@@ -1469,6 +1471,11 @@ window.onload = function(){
   saveCanvas = document.getElementById('save');
   saveCTX = saveCanvas.getContext("2d");
   var rect = saveCanvas.getBoundingClientRect();
+
+  var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+
+  selectedTileX = selectedTiles.x;
+  selectedTileY = selectedTiles.y;
 
   // $(window).on('mousemove', function(e) {
   //   var x = (e.clientX - rect.left) / 4,
@@ -1549,7 +1556,7 @@ window.onload = function(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
-    animateMove();
+    // animateMove();
   });
 };
 
@@ -1580,15 +1587,10 @@ function animateMove(){
 
 
   // How to change player coordinates and relate them to tiles?
-  var rect = saveCanvas.getBoundingClientRect();
-  var x = player.x + player.sprite.originX,
-      y = player.y + player.sprite.originY;
-  var xCoord = (x - (tileW / 2) - originX);
-  var yCoord = (y - (tileH / 2) - originY);
-  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
-  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
-  selectedTileX = tileX;
-  selectedTileY = tileY;
+
+  var tileXY = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  selectedTileX = tileXY.x;
+  selectedTileY = tileXY.y;
 
 
 
@@ -1654,4 +1656,14 @@ function colorSet(color){
   };
 
   return colorObj;
+}
+
+function coordsToTiles(x, y){
+  var rect = saveCanvas.getBoundingClientRect();
+
+  var xCoord = (x - (tileW / 2) - originX);
+  var yCoord = (y - (tileH / 2) - originY);
+  var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
+  var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
+  return {x: tileX, y: tileY};
 }

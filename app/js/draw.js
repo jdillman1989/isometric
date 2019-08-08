@@ -32,13 +32,13 @@ function drawGame(map){
           // When to draw player in tile order? How to make sure player is on top tile layer?
           var top = true;
           for(var k = i + 1; k < maxHeight; ++k){
-            if(map[currentPos][i]){
+            if(map[currentPos][k]){
               top = false;
             }
           }
 
           if(x == selectedTileX && y == selectedTileY && top){
-            drawPlayer(saveCTX, player.x, player.y, player.sprite.render, player.width, player.height);
+            drawPlayer(saveCTX, player.x, player.y, layer, player.sprite.render, player.width, player.height);
           }
 
 
@@ -146,11 +146,13 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
   }
 }
 
-function drawPlayer(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
+function drawPlayer(thisCTX, posX, posY, layer, thisSprite, sizeX, sizeY){
 
   // NO DELETE. Need this to convert tile coords to pixel coords
   // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
   // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
+
+  posY = posY + layer;
 
   var offX = posX + speedX;
   var offY = posY + speedY;
