@@ -2,7 +2,7 @@ window.onload = function(){
 
   saveCanvas = document.getElementById('save');
   saveCTX = saveCanvas.getContext("2d");
-  var rect = saveCanvas.getBoundingClientRect();
+  saveCTX.filter = 'url(#remove-alpha)';
 
   var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
 
@@ -88,6 +88,6 @@ window.onload = function(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
-    // animateMove();
+    animateMove();
   });
 };

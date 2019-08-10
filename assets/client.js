@@ -9,8 +9,8 @@ var tileW = 20,
     tileH = tileW / 2,
     mapW = 10,
     mapH = 10,
-    originX = 0.5,
-    originY = 72.5,
+    originX = 0,
+    originY = 72,
     layerDepth = 5;
 
 var keys = {
@@ -1313,7 +1313,7 @@ function drawGame(map){
           color.warm = map[currentPos][i].tile.warm;
           color.cool = map[currentPos][i].tile.cool;
 
-          drawTile(x, y, color, layer, false);
+          drawTile(x, y, color, layer);
           tileIndex++;
 
 
@@ -1359,22 +1359,18 @@ function drawGame(map){
   saveCTX.fillRect(selectedTileX, selectedTileY, 1, 1);
 }
 
-function drawTile(x, y, color, layer, test){
+function drawTile(x, y, color, layer){
   var offX = ((x * tileW) / 2) + ((y * tileW) / 2) + originX;
   var offY = ((y * tileH) / 2) - ((x * tileH) / 2) + layer;
-
-  var lineFill = 1;
 
   // Draw tile depth east
   saveCTX.fillStyle = color.cool;
   saveCTX.strokeStyle = color.cool;
   saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
   saveCTX.moveTo(offX + tileW, (offY + tileH / 2)); // >
   saveCTX.lineTo(offX + tileW, (offY + tileH / 2) + layerDepth); // |
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // /
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
-  saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
 
@@ -1382,12 +1378,10 @@ function drawTile(x, y, color, layer, test){
   saveCTX.fillStyle = color.warm;
   saveCTX.strokeStyle = color.warm;
   saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
   saveCTX.moveTo(offX, offY + tileH / 2); // <
   saveCTX.lineTo(offX, (offY + tileH / 2) + layerDepth); // |
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) + layerDepth); // \
   saveCTX.lineTo(offX + tileW / 2, (offY + tileH) - (tileH / 2)); // |
-  saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
 
@@ -1395,21 +1389,12 @@ function drawTile(x, y, color, layer, test){
   saveCTX.fillStyle = color.base;
   saveCTX.strokeStyle = color.base;
   saveCTX.beginPath();
-  saveCTX.lineWidth = lineFill;
   saveCTX.moveTo(offX, offY + tileH / 2);
   saveCTX.lineTo(offX + tileW / 2, offY, offX + tileW, offY + tileH / 2);
   saveCTX.lineTo(offX + tileW, offY + tileH / 2, offX + tileW / 2, offY + tileH);
   saveCTX.lineTo(offX + tileW / 2, offY + tileH, offX, offY + tileH / 2);
-  saveCTX.stroke();
   saveCTX.fill();
   saveCTX.closePath();
-
-  if(test){
-
-    saveCTX.fillStyle = 'orange';
-    saveCTX.font = "7px Arial";
-    saveCTX.fillText(test, (offX + 6), (offY + 6));
-  }
 }
 
 function drawLine(x1, y1, x2, y2, color) {
@@ -1470,7 +1455,7 @@ window.onload = function(){
 
   saveCanvas = document.getElementById('save');
   saveCTX = saveCanvas.getContext("2d");
-  var rect = saveCanvas.getBoundingClientRect();
+  saveCTX.filter = 'url(#remove-alpha)';
 
   var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
 
@@ -1556,7 +1541,7 @@ window.onload = function(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
-    // animateMove();
+    animateMove();
   });
 };
 

@@ -9,8 +9,8 @@ var tileW = 20,
     tileH = tileW / 2,
     mapW = 10,
     mapH = 10,
-    originX = 0.5,
-    originY = 72.5,
+    originX = 0,
+    originY = 72,
     layerDepth = 5;
 
 var keys = {
