@@ -9,8 +9,8 @@ var tileW = 20,
     tileH = tileW / 2,
     mapW = 10,
     mapH = 10,
-    originX = 0,
-    originY = 72,
+    originX = 0.5,
+    originY = 72.5,
     layerDepth = 5;
 
 var keys = {
@@ -28,6 +28,9 @@ var tiles = {
   rock: {r:188,g:167,b:82,a:1},
   lava: {r:209,g:105,b:42,a:1}
 };
+
+var times = [];
+var fps;
 
 
 
@@ -70,7 +73,7 @@ var playerSprite = {
     0,0,0,0,0,0,0,0,0,0
   ]
 };
-var player = {x:100, y:0, width: 10, height: 18, sprite: playerSprite};
+var player = {x:90, y:53, width: 10, height: 18, sprite: playerSprite};
 
 var speedX = 0,
     speedY = 0;
@@ -1313,6 +1316,10 @@ function drawGame(map){
           color.warm = map[currentPos][i].tile.warm;
           color.cool = map[currentPos][i].tile.cool;
 
+          if(x == selectedTileX && y == selectedTileY && top){
+            color.base = 'rgba(255,255,0,1)';
+          }
+
           drawTile(x, y, color, layer);
           tileIndex++;
 
@@ -1331,7 +1338,7 @@ function drawGame(map){
           }
 
           if(x == selectedTileX && y == selectedTileY && top){
-            drawPlayer(saveCTX, player.x, player.y, layer, player.sprite.render, player.width, player.height);
+            drawPlayer(saveCTX, player.x, player.y, i, player.sprite.render, player.width, player.height);
           }
 
 
@@ -1352,11 +1359,6 @@ function drawGame(map){
     layer = layer - layerDepth;
 
   }
-
-
-
-  saveCTX.fillStyle = '#FF0';
-  saveCTX.fillRect(selectedTileX, selectedTileY, 1, 1);
 }
 
 function drawTile(x, y, color, layer){
@@ -1424,16 +1426,19 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
   }
 }
 
-function drawPlayer(thisCTX, posX, posY, layer, thisSprite, sizeX, sizeY){
+function drawPlayer(thisCTX, posX, posY, layerCoord, thisSprite, sizeX, sizeY){
 
   // NO DELETE. Need this to convert tile coords to pixel coords
   // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
   // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
 
-  posY = posY + layer;
+  posY = posY - (layerCoord * layerDepth);
 
   var offX = posX + speedX;
   var offY = posY + speedY;
+
+  thisCTX.fillStyle = '#FFF';
+  thisCTX.fillRect(offX, offY, 1, 1);
 
   var k = 0;
   for(var y = offY; y < offY + sizeY; ++y){
@@ -1457,7 +1462,7 @@ window.onload = function(){
   saveCTX = saveCanvas.getContext("2d");
   saveCTX.filter = 'url(#remove-alpha)';
 
-  var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  var selectedTiles = coordsToTile(player.x + player.sprite.originX, player.y + player.sprite.originY);
 
   selectedTileX = selectedTiles.x;
   selectedTileY = selectedTiles.y;
@@ -1472,6 +1477,13 @@ window.onload = function(){
   //   selectedTileX = tileX;
   //   selectedTileY = tileY;
   //   drawGame(map);
+  // });
+
+  // $('body').on('click', function(e) {
+  //   var rect = saveCanvas.getBoundingClientRect();
+  //   var x = (e.clientX - rect.left) / 4,
+  //       y = (e.clientY - rect.top) / 4;
+  //   $('.message').text('x: ' + x + ', y: ' + y);
   // });
 
   // Pre-render colors
@@ -1543,25 +1555,29 @@ window.onload = function(){
   window.requestAnimationFrame(function(){
     animateMove();
   });
+
+  var fpsMonitor = setInterval(function(){
+    $('.message').text(fps);
+  }, 700);
 };
 
 function animateMove(){
 
   if(keys.up){
-    speedY = -0.2;
+    speedY = -1;
   }
   else if(keys.down){
-    speedY = 0.2;
+    speedY = 1;
   }
   else{
     speedY = 0;
   }
 
   if(keys.left){
-    speedX = -0.4;
+    speedX = -2;
   }
   else if(keys.right){
-    speedX = 0.4;
+    speedX = 2;
   }
   else{
     speedX = 0;
@@ -1573,7 +1589,7 @@ function animateMove(){
 
   // How to change player coordinates and relate them to tiles?
 
-  var tileXY = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  var tileXY = coordsToTile(player.x + player.sprite.originX, player.y + player.sprite.originY);
   selectedTileX = tileXY.x;
   selectedTileY = tileXY.y;
 
@@ -1585,9 +1601,46 @@ function animateMove(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
+
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+
     animateMove();
   });
 }
+
+
+
+
+
+
+
+function refreshLoop() {
+  window.requestAnimationFrame(() => {
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+    refreshLoop();
+  });
+}
+
+refreshLoop();
+
+
+
+
+
+
+
+
+
 
 function toColor(colorObj){
   return 'rgba(' + colorValLimit(colorObj.r) + ',' + colorValLimit(colorObj.g) + ',' + colorValLimit(colorObj.b) + ',' + colorObj.a + ')';
@@ -1643,7 +1696,7 @@ function colorSet(color){
   return colorObj;
 }
 
-function coordsToTiles(x, y){
+function coordsToTile(x, y){
   var rect = saveCanvas.getBoundingClientRect();
 
   var xCoord = (x - (tileW / 2) - originX);
@@ -1651,4 +1704,12 @@ function coordsToTiles(x, y){
   var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
   var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
   return {x: tileX, y: tileY};
+}
+
+function tileToCoords(x, y){
+  var rect = saveCanvas.getBoundingClientRect();
+
+  var offX = (((x * tileW) / 2) + ((y * tileW) / 2) + originX) + (tileW / 2);
+  var offY = (((y * tileH) / 2) - ((x * tileH) / 2) + originY) + (tileH / 2);
+  return {x: offX, y: offY};
 }

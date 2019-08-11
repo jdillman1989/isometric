@@ -1,20 +1,20 @@
 function animateMove(){
 
   if(keys.up){
-    speedY = -0.2;
+    speedY = -1;
   }
   else if(keys.down){
-    speedY = 0.2;
+    speedY = 1;
   }
   else{
     speedY = 0;
   }
 
   if(keys.left){
-    speedX = -0.4;
+    speedX = -2;
   }
   else if(keys.right){
-    speedX = 0.4;
+    speedX = 2;
   }
   else{
     speedX = 0;
@@ -26,7 +26,7 @@ function animateMove(){
 
   // How to change player coordinates and relate them to tiles?
 
-  var tileXY = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  var tileXY = coordsToTile(player.x + player.sprite.originX, player.y + player.sprite.originY);
   selectedTileX = tileXY.x;
   selectedTileY = tileXY.y;
 
@@ -38,9 +38,46 @@ function animateMove(){
 
   drawGame(map);
   window.requestAnimationFrame(function(){
+
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+
     animateMove();
   });
 }
+
+
+
+
+
+
+
+function refreshLoop() {
+  window.requestAnimationFrame(() => {
+    const now = performance.now();
+    while (times.length > 0 && times[0] <= now - 1000) {
+      times.shift();
+    }
+    times.push(now);
+    fps = times.length;
+    refreshLoop();
+  });
+}
+
+refreshLoop();
+
+
+
+
+
+
+
+
+
 
 function toColor(colorObj){
   return 'rgba(' + colorValLimit(colorObj.r) + ',' + colorValLimit(colorObj.g) + ',' + colorValLimit(colorObj.b) + ',' + colorObj.a + ')';
@@ -96,7 +133,7 @@ function colorSet(color){
   return colorObj;
 }
 
-function coordsToTiles(x, y){
+function coordsToTile(x, y){
   var rect = saveCanvas.getBoundingClientRect();
 
   var xCoord = (x - (tileW / 2) - originX);
@@ -104,4 +141,12 @@ function coordsToTiles(x, y){
   var tileX = Math.round((xCoord / tileW) - (yCoord / tileH));
   var tileY = Math.round((xCoord / tileW) + (yCoord / tileH));
   return {x: tileX, y: tileY};
+}
+
+function tileToCoords(x, y){
+  var rect = saveCanvas.getBoundingClientRect();
+
+  var offX = (((x * tileW) / 2) + ((y * tileW) / 2) + originX) + (tileW / 2);
+  var offY = (((y * tileH) / 2) - ((x * tileH) / 2) + originY) + (tileH / 2);
+  return {x: offX, y: offY};
 }

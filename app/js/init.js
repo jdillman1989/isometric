@@ -4,7 +4,7 @@ window.onload = function(){
   saveCTX = saveCanvas.getContext("2d");
   saveCTX.filter = 'url(#remove-alpha)';
 
-  var selectedTiles = coordsToTiles(player.x + player.sprite.originX, player.y + player.sprite.originY);
+  var selectedTiles = coordsToTile(player.x + player.sprite.originX, player.y + player.sprite.originY);
 
   selectedTileX = selectedTiles.x;
   selectedTileY = selectedTiles.y;
@@ -90,4 +90,8 @@ window.onload = function(){
   window.requestAnimationFrame(function(){
     animateMove();
   });
+
+  var fpsMonitor = setInterval(function(){
+    $('.message').text(fps);
+  }, 700);
 };

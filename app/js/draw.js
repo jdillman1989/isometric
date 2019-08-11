@@ -20,6 +20,10 @@ function drawGame(map){
           color.warm = map[currentPos][i].tile.warm;
           color.cool = map[currentPos][i].tile.cool;
 
+          if(x == selectedTileX && y == selectedTileY && top){
+            color.base = 'rgba(255,255,0,1)';
+          }
+
           drawTile(x, y, color, layer);
           tileIndex++;
 
@@ -38,7 +42,7 @@ function drawGame(map){
           }
 
           if(x == selectedTileX && y == selectedTileY && top){
-            drawPlayer(saveCTX, player.x, player.y, layer, player.sprite.render, player.width, player.height);
+            drawPlayer(saveCTX, player.x, player.y, i, player.sprite.render, player.width, player.height);
           }
 
 
@@ -59,11 +63,6 @@ function drawGame(map){
     layer = layer - layerDepth;
 
   }
-
-
-
-  saveCTX.fillStyle = '#FF0';
-  saveCTX.fillRect(selectedTileX, selectedTileY, 1, 1);
 }
 
 function drawTile(x, y, color, layer){
@@ -131,13 +130,13 @@ function drawSprite(thisCTX, posX, posY, thisSprite, sizeX, sizeY){
   }
 }
 
-function drawPlayer(thisCTX, posX, posY, layer, thisSprite, sizeX, sizeY){
+function drawPlayer(thisCTX, posX, posY, layerCoord, thisSprite, sizeX, sizeY){
 
   // NO DELETE. Need this to convert tile coords to pixel coords
   // var offX = (((posX * tileW) / 2) + ((posY * tileW) / 2) + originX) + (tileW / 2) - (sizeX / 2) + speedX;
   // var offY = (((posY * tileH) / 2) - ((posX * tileH) / 2) + originY) - (sizeY) + (tileH / 2) + speedY;
 
-  posY = posY + layer;
+  posY = posY - (layerCoord * layerDepth);
 
   var offX = posX + speedX;
   var offY = posY + speedY;

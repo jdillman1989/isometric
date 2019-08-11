@@ -9,8 +9,8 @@ var tileW = 20,
     tileH = tileW / 2,
     mapW = 10,
     mapH = 10,
-    originX = 0,
-    originY = 72,
+    originX = 0.5,
+    originY = 72.5,
     layerDepth = 5;
 
 var keys = {
@@ -28,6 +28,9 @@ var tiles = {
   rock: {r:188,g:167,b:82,a:1},
   lava: {r:209,g:105,b:42,a:1}
 };
+
+var times = [];
+var fps;
 
 
 
@@ -70,7 +73,7 @@ var playerSprite = {
     0,0,0,0,0,0,0,0,0,0
   ]
 };
-var player = {x:100, y:0, width: 10, height: 18, sprite: playerSprite};
+var player = {x:90, y:53, width: 10, height: 18, sprite: playerSprite};
 
 var speedX = 0,
     speedY = 0;
